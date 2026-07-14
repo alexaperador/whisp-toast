@@ -1,31 +1,44 @@
 # whisp-toast
 
-Toasts ligeros para React / Next.js. Cero dependencias, API global — llamá `whisp.success('mensaje')` desde cualquier parte de tu código, sin hooks ni refs ni providers.
+A lightweight toast notification library for React and Next.js. Zero dependencies, simple global API — trigger notifications from anywhere using `whisp.success('message')` without hooks, refs, or providers.
 
-- 🪶 Sin dependencias externas
-- 🌐 API global — funciona fuera de componentes React (handlers, fetch, utils)
-- 🎨 Colores personalizables por CSS variables
-- 🖼️ Íconos personalizables, por tipo o por toast individual
-- 📍 6 posiciones en pantalla
-- 🔒 Tipado con TypeScript
+## Features
 
-## Instalación
+- 🪶 **Zero dependencies** — lightweight and framework-friendly
+- 🌐 **Global API** — trigger toasts from components, event handlers, async functions, utilities, and more
+- 🎨 **CSS variable customization** — fully customizable colors, borders, and appearance
+- 🖼️ **Custom icons** — built-in icons by type or custom icons per toast
+- 📍 **Flexible positioning** — 6 screen positions supported
+- 🔒 **TypeScript support** — fully typed API and components
+- ⚡ **React / Next.js optimized**
+
+---
+
+## Installation
 
 ```bash
 npm install whisp-toast
 ```
 
-## Uso básico
+---
 
-**1. Montá el componente `Whisper`** una sola vez, en tu layout raíz:
+## Basic Usage
+
+### 1. Mount the `Whisper` component once
+
+Add `Whisper` to your root layout:
 
 ```tsx
 // app/layout.tsx
 import { Whisper } from 'whisp-toast'
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="es">
+    <html lang="en">
       <body>
         {children}
         <Whisper position="bottom-right" />
@@ -35,103 +48,172 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-**2. Llamá `whisp` desde cualquier componente cliente, handler, o función async:**
+---
+
+### 2. Trigger notifications anywhere
+
+Use `whisp` from client components, handlers, async functions, or utilities:
 
 ```tsx
 'use client'
+
 import { whisp } from 'whisp-toast'
 
-export default function Formulario() {
+export default function Form() {
   const handleSubmit = async () => {
     try {
-      await fetch('/api/guardar', { method: 'POST' })
-      whisp.success('¡Guardado con éxito!')
+      await fetch('/api/save', { method: 'POST' })
+      whisp.success('Saved successfully!')
     } catch {
-      whisp.error('Algo salió mal')
+      whisp.error('Something went wrong')
     }
   }
 
-  return <button onClick={handleSubmit}>Guardar</button>
+  return (
+    <button onClick={handleSubmit}>
+      Save
+    </button>
+  )
 }
 ```
 
-No hace falta ningún import de estilos por separado — los estilos ya vienen incluidos al importar el componente.
+No additional CSS imports are required. Styles are bundled automatically with the component.
 
-## API
+---
 
-### `whisp(message, options?)`
+# API
 
-Dispara un toast neutro (sin ícono por defecto).
+## `whisp(message, options?)`
 
-```tsx
-whisp('Mensaje simple')
-whisp('Con duración custom', { duration: 5000 })
-```
-
-### Variantes por tipo
+Creates a default toast notification.
 
 ```tsx
-whisp.success('¡Guardado con éxito!')
-whisp.error('Algo salió mal')
-whisp.info('Tenés una notificación nueva')
-whisp.alert('¡Atención urgente!')
-```
+whisp('Simple message')
 
-### Opciones
-
-Cada función acepta un segundo argumento, que puede ser un número (duración en ms, para mantener compatibilidad) o un objeto de opciones:
-
-```tsx
-whisp.success('Listo', 5000) // duración directa
-
-whisp.success('Listo', {
-  duration: 5000,     // ms antes de cerrarse. 0 = no se cierra solo. Default: 3000
-  icon: '🎉',         // ícono custom para este toast puntual
+whisp('Custom duration', {
+  duration: 5000,
 })
 ```
 
-Todos los toasts se pueden cerrar antes de tiempo haciendo click sobre ellos.
+---
 
-## Componente `<Whisper />`
+## Toast variants
 
-Se monta una sola vez en el layout raíz de tu app.
+```tsx
+whisp.success('Successfully saved!')
 
-| Prop | Valores | Default |
+whisp.error('Something went wrong')
+
+whisp.info('You have a new notification')
+
+whisp.alert('Attention required')
+```
+
+---
+
+## Options
+
+Every toast method accepts either:
+
+- a number (duration in milliseconds)
+- an options object
+
+```tsx
+// Duration shorthand
+whisp.success('Done', 5000)
+
+// Full options
+whisp.success('Done', {
+  duration: 5000,
+  icon: '🎉',
+})
+```
+
+### Available options
+
+| Option | Type | Description |
 |---|---|---|
-| `position` | `'top-center'` \| `'top-left'` \| `'top-right'` \|`'bottom-right'` \| `'bottom-left'`\| `'bottom-center'`  | `'top-center'` |
+| `duration` | `number` | Time before automatic dismissal. `0` disables auto close. Default: `3000` |
+| `icon` | `ReactNode` | Custom icon for this specific toast |
+
+All notifications can also be manually dismissed by clicking them.
+
+---
+
+# `<Whisper />`
+
+The `Whisper` component should be mounted once in your application root.
+
+## Props
+
+| Prop | Values | Default |
+|---|---|---|
+| `position` | `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right` | `top-center` |
+
+Example:
 
 ```tsx
 <Whisper position="top-left" />
 ```
 
-## Personalizar íconos
+---
 
-### Ícono por defecto de un tipo
+# Custom Icons
 
-Cada tipo (`success`, `error`, `info`, `alert`) trae un ícono SVG incluido, sin dependencias externas.
+Each toast type includes a default SVG icon with no external dependencies.
 
-### Ícono en un toast puntual
+You can override icons per notification using any valid `ReactNode`:
 
-Sobrescribe el ícono por defecto solo para esa llamada. Acepta cualquier `ReactNode`: emoji, string, SVG propio, o un componente de ícono de tu librería favorita.
+- Emoji
+- Strings
+- SVG elements
+- Icon libraries
+
+Example:
 
 ```tsx
-whisp('Subiendo archivo...', { icon: '⏳' })
+whisp('Uploading file...', {
+  icon: '⏳',
+})
+```
 
-whisp.success('¡Lanzado!', {
+Custom SVG:
+
+```tsx
+whisp.success('Deployed!', {
   icon: (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M18 6 7 17l-5-5" />
     </svg>
   ),
 })
-
-// Sin ícono, aunque el tipo tenga uno por defecto
-whisp.success('Sin ícono', { icon: null })
 ```
 
-## Personalizar colores
+Disable the default icon:
 
-whisp-toast expone CSS variables con valores por defecto (dark, estilo Sonner). Sobrescribilas donde quieras: `globals.css`, un `<style>` inline, o dentro de un selector específico.
+```tsx
+whisp.success('Without icon', {
+  icon: null,
+})
+```
+
+---
+
+# Customization
+
+whisp-toast exposes CSS variables for complete styling control.
+
+Override them globally in your application:
 
 ```css
 :root {
@@ -154,22 +236,26 @@ whisp-toast expone CSS variables con valores por defecto (dark, estilo Sonner). 
 }
 ```
 
-Si no definís nada, se usan los valores por defecto — cero configuración obligatoria.
+No configuration is required. Default values are included out of the box.
 
-### Tabla de variables
+---
 
-| Variable | Controla | Default |
+## CSS Variables Reference
+
+| Variable | Description | Default |
 |---|---|---|
-| `--whisp-bg` | Fondo de la card | `#1a1a1a` |
-| `--whisp-text` | Color del texto | `#f5f5f5` |
-| `--whisp-border` | Borde de la card | `rgba(255,255,255,0.08)` |
-| `--whisp-radius` | Radio de esquinas | `10px` |
-| `--whisp-success-bg` / `--whisp-success-color` | Círculo del ícono de éxito | `#22c55e` / `#052e16` |
-| `--whisp-error-bg` / `--whisp-error-color` | Círculo del ícono de error | `#ef4444` / `#450a0a` |
-| `--whisp-info-bg` / `--whisp-info-color` | Círculo del ícono de info | `#3b82f6` / `#172554` |
-| `--whisp-alert-bg` / `--whisp-alert-color` | Círculo del ícono de alerta | `#f59e0b` / `#451a03` |
+| `--whisp-bg` | Toast background | `#1a1a1a` |
+| `--whisp-text` | Text color | `#f5f5f5` |
+| `--whisp-border` | Toast border | `rgba(255,255,255,0.08)` |
+| `--whisp-radius` | Border radius | `10px` |
+| `--whisp-success-bg` / `--whisp-success-color` | Success icon colors | `#22c55e` / `#052e16` |
+| `--whisp-error-bg` / `--whisp-error-color` | Error icon colors | `#ef4444` / `#450a0a` |
+| `--whisp-info-bg` / `--whisp-info-color` | Info icon colors | `#3b82f6` / `#172554` |
+| `--whisp-alert-bg` / `--whisp-alert-color` | Alert icon colors | `#f59e0b` / `#451a03` |
 
-### Ejemplo: dark/light mode automático
+---
+
+## Dark / Light mode example
 
 ```css
 @media (prefers-color-scheme: light) {
@@ -181,14 +267,23 @@ Si no definís nada, se usan los valores por defecto — cero configuración obl
 }
 ```
 
-## TypeScript
+---
 
-Todos los tipos están exportados:
+# TypeScript
+
+All public types are exported:
 
 ```tsx
-import type { WhispType, WhispItem, WhispOptions, WhisperProps } from 'whisp-toast'
+import type {
+  WhispType,
+  WhispItem,
+  WhispOptions,
+  WhisperProps,
+} from 'whisp-toast'
 ```
 
-## Licencia
+---
 
-MIT
+# License
+
+MIT © whisp-toast contributors
