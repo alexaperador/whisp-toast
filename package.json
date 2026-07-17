@@ -29,7 +29,7 @@
     "notification",
     "ui"
   ],
-  "author": "",
+  "author": "Alex Aperador Salcedo",
   "license": "MIT",
   "peerDependencies": {
     "react": ">=18.0.0",
@@ -42,5 +42,13 @@
     "react-dom": "^18.3.0",
     "tsup": "^8.0.0",
     "typescript": "^5.5.0"
+  },
+  "homepage": "https://github.com/alexaperador/whisp-toast#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexaperador/whisp-toast.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alexaperador/whisp-toast/issues"
   }
 }
