@@ -1,36 +1,109 @@
 # whisp-toast
 
-A lightweight toast notification library for React and Next.js. Zero dependencies, simple global API — trigger notifications from anywhere using `whisp.success('message')` without hooks, refs, or providers.
+<p align="center">
+  <b>Lightweight toast notifications for React and Next.js.</b>
+  <br />
+  Zero dependencies. Global API. Fully customizable.
+</p>
 
-## Features
+<p align="center">
 
-- 🪶 **Zero dependencies** — lightweight and framework-friendly
-- 🌐 **Global API** — trigger toasts from components, event handlers, async functions, utilities, and more
-- 🎨 **CSS variable customization** — fully customizable colors, borders, and appearance
-- 🖼️ **Custom icons** — built-in icons by type or custom icons per toast
-- 📍 **Flexible positioning** — 6 screen positions supported
-- 🔒 **TypeScript support** — fully typed API and components
-- ⚡ **React / Next.js optimized**
+![npm version](https://img.shields.io/npm/v/whisp-toast)
+![npm downloads](https://img.shields.io/npm/dm/whisp-toast)
+![license](https://img.shields.io/npm/l/whisp-toast)
+![typescript](https://img.shields.io/badge/TypeScript-supported-blue)
+
+</p>
 
 ---
 
-## Installation
+## Overview
+
+**whisp-toast** is a lightweight toast notification library built for modern React and Next.js applications.
+
+Trigger notifications from anywhere with a simple global API:
+
+```tsx
+whisp.success("Saved successfully")
+```
+
+No providers.
+No hooks.
+No refs.
+No configuration.
+
+Just mount `Whisper` once and start sending notifications.
+
+---
+
+# Features
+
+* 🪶 **Zero dependencies**
+
+  * Minimal bundle size and simple integration.
+
+* 🌐 **Global API**
+
+  * Trigger notifications from components, utilities, async functions, and event handlers.
+
+* ⚡ **React & Next.js optimized**
+
+  * Works seamlessly with modern application architectures.
+
+* 🔒 **First-class TypeScript support**
+
+  * Fully typed API and exported types.
+
+* 🎨 **CSS variable customization**
+
+  * Easily adapt colors, radius, borders, and themes.
+
+* 🖼️ **Custom icons**
+
+  * Use emojis, SVGs, or any React node.
+
+* 📍 **Flexible positioning**
+
+  * Six different screen positions.
+
+* 🌙 **Dark mode friendly**
+
+  * Built to work with custom themes.
+
+---
+
+# Installation
 
 ```bash
 npm install whisp-toast
 ```
 
+or:
+
+```bash
+pnpm add whisp-toast
+```
+
+or:
+
+```bash
+yarn add whisp-toast
+```
+
 ---
 
-## Basic Usage
+# Quick Start
 
-### 1. Mount the `Whisper` component once
+## 1. Add `Whisper`
 
-Add `Whisper` to your root layout:
+Mount the component once in your application root.
+
+### Next.js App Router
 
 ```tsx
 // app/layout.tsx
-import { Whisper } from 'whisp-toast'
+
+import { Whisper } from "whisp-toast"
 
 export default function RootLayout({
   children,
@@ -41,6 +114,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {children}
+
         <Whisper position="bottom-right" />
       </body>
     </html>
@@ -50,219 +124,235 @@ export default function RootLayout({
 
 ---
 
-### 2. Trigger notifications anywhere
+## 2. Trigger notifications
 
-Use `whisp` from client components, handlers, async functions, or utilities:
+Use `whisp` anywhere.
 
 ```tsx
-'use client'
+"use client"
 
-import { whisp } from 'whisp-toast'
+import { whisp } from "whisp-toast"
 
-export default function Form() {
-  const handleSubmit = async () => {
+export default function Button() {
+  const handleClick = async () => {
     try {
-      await fetch('/api/save', { method: 'POST' })
-      whisp.success('Saved successfully!')
+      await saveData()
+
+      whisp.success("Changes saved")
     } catch {
-      whisp.error('Something went wrong')
+      whisp.error("Something went wrong")
     }
   }
 
   return (
-    <button onClick={handleSubmit}>
+    <button onClick={handleClick}>
       Save
     </button>
   )
 }
 ```
 
-No additional CSS imports are required. Styles are bundled automatically with the component.
+No CSS imports required. Styles are bundled automatically.
 
 ---
 
 # API
 
-## `whisp(message, options?)`
+## Default toast
 
-Creates a default toast notification.
+Create a simple notification:
 
-```tsx
-whisp('Simple message')
+```ts
+whisp("Hello world")
+```
 
-whisp('Custom duration', {
+With options:
+
+```ts
+whisp("Hello world", {
   duration: 5000,
 })
 ```
 
 ---
 
-## Toast variants
+# Toast Types
 
-```tsx
-whisp.success('Successfully saved!')
+Built-in variants:
 
-whisp.error('Something went wrong')
+```ts
+whisp.success("Operation completed")
 
-whisp.info('You have a new notification')
+whisp.error("Request failed")
 
-whisp.alert('Attention required')
+whisp.info("New notification")
+
+whisp.alert("Attention required")
 ```
 
 ---
 
-## Options
+# Options
 
-Every toast method accepts either:
+Every toast accepts:
 
-- a number (duration in milliseconds)
-- an options object
+* duration number
+* options object
 
-```tsx
-// Duration shorthand
-whisp.success('Done', 5000)
+## Duration shorthand
 
-// Full options
-whisp.success('Done', {
-  duration: 5000,
-  icon: '🎉',
-})
+```ts
+whisp.success(
+  "Saved",
+  5000
+)
 ```
 
-### Available options
+## Options object
 
-| Option | Type | Description |
-|---|---|---|
-| `duration` | `number` | Time before automatic dismissal. `0` disables auto close. Default: `3000` |
-| `icon` | `ReactNode` | Custom icon for this specific toast |
-
-All notifications can also be manually dismissed by clicking them.
+```ts
+whisp.success(
+  "Saved",
+  {
+    duration: 5000,
+    icon: "🎉",
+  }
+)
+```
 
 ---
 
-# `<Whisper />`
+## Available options
 
-The `Whisper` component should be mounted once in your application root.
+| Option     | Type        | Default       | Description      |
+| ---------- | ----------- | ------------- | ---------------- |
+| `duration` | `number`    | `3000`        | Auto close delay |
+| `icon`     | `ReactNode` | Built-in icon | Custom icon      |
+
+Set:
+
+```ts
+duration: 0
+```
+
+to keep the toast visible permanently.
+
+All notifications can also be dismissed manually by clicking them.
+
+---
+
+# Whisper Component
+
+`Whisper` renders and manages all toast notifications.
+
+It should only be mounted once.
 
 ## Props
 
-| Prop | Values | Default |
-|---|---|---|
+| Prop       | Values                                                                                | Default      |
+| ---------- | ------------------------------------------------------------------------------------- | ------------ |
 | `position` | `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right` | `top-center` |
 
 Example:
 
 ```tsx
-<Whisper position="top-left" />
+<Whisper position="top-right" />
 ```
 
 ---
 
 # Custom Icons
 
-Each toast type includes a default SVG icon with no external dependencies.
+Every toast type includes a default SVG icon.
 
-You can override icons per notification using any valid `ReactNode`:
+You can replace it:
 
-- Emoji
-- Strings
-- SVG elements
-- Icon libraries
+## Emoji
 
-Example:
-
-```tsx
-whisp('Uploading file...', {
-  icon: '⏳',
-})
+```ts
+whisp.info(
+  "Uploading...",
+  {
+    icon: "⏳",
+  }
+)
 ```
 
-Custom SVG:
+## Custom React component
 
 ```tsx
-whisp.success('Deployed!', {
-  icon: (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M18 6 7 17l-5-5" />
-    </svg>
-  ),
-})
+whisp.success(
+  "Completed",
+  {
+    icon: <CheckIcon />,
+  }
+)
 ```
 
-Disable the default icon:
+## Disable icons
 
-```tsx
-whisp.success('Without icon', {
-  icon: null,
-})
+```ts
+whisp.success(
+  "No icon",
+  {
+    icon: null,
+  }
+)
 ```
 
 ---
 
-# Customization
+# Custom Styling
 
-whisp-toast exposes CSS variables for complete styling control.
+whisp-toast uses CSS variables for complete customization.
 
-Override them globally in your application:
+Example:
 
 ```css
 :root {
   --whisp-bg: #ffffff;
   --whisp-text: #111111;
-  --whisp-border: rgba(0, 0, 0, 0.1);
+  --whisp-border: rgba(0,0,0,.1);
   --whisp-radius: 12px;
 
-  --whisp-success-bg: #10b981;
-  --whisp-success-color: #052e16;
-
-  --whisp-error-bg: #dc2626;
-  --whisp-error-color: #450a0a;
-
-  --whisp-info-bg: #6366f1;
-  --whisp-info-color: #1e1b4b;
-
-  --whisp-alert-bg: #eab308;
-  --whisp-alert-color: #451a03;
+  --whisp-success-bg: #22c55e;
+  --whisp-error-bg: #ef4444;
+  --whisp-info-bg: #3b82f6;
+  --whisp-alert-bg: #f59e0b;
 }
 ```
 
-No configuration is required. Default values are included out of the box.
+---
+
+# CSS Variables Reference
+
+| Variable                | Description        |
+| ----------------------- | ------------------ |
+| `--whisp-bg`            | Toast background   |
+| `--whisp-text`          | Text color         |
+| `--whisp-border`        | Border color       |
+| `--whisp-radius`        | Border radius      |
+| `--whisp-success-bg`    | Success background |
+| `--whisp-success-color` | Success foreground |
+| `--whisp-error-bg`      | Error background   |
+| `--whisp-error-color`   | Error foreground   |
+| `--whisp-info-bg`       | Info background    |
+| `--whisp-info-color`    | Info foreground    |
+| `--whisp-alert-bg`      | Alert background   |
+| `--whisp-alert-color`   | Alert foreground   |
 
 ---
 
-## CSS Variables Reference
+# Dark Mode
 
-| Variable | Description | Default |
-|---|---|---|
-| `--whisp-bg` | Toast background | `#1a1a1a` |
-| `--whisp-text` | Text color | `#f5f5f5` |
-| `--whisp-border` | Toast border | `rgba(255,255,255,0.08)` |
-| `--whisp-radius` | Border radius | `10px` |
-| `--whisp-success-bg` / `--whisp-success-color` | Success icon colors | `#22c55e` / `#052e16` |
-| `--whisp-error-bg` / `--whisp-error-color` | Error icon colors | `#ef4444` / `#450a0a` |
-| `--whisp-info-bg` / `--whisp-info-color` | Info icon colors | `#3b82f6` / `#172554` |
-| `--whisp-alert-bg` / `--whisp-alert-color` | Alert icon colors | `#f59e0b` / `#451a03` |
-
----
-
-## Dark / Light mode example
+Example:
 
 ```css
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    --whisp-bg: #ffffff;
-    --whisp-text: #111111;
-    --whisp-border: rgba(0, 0, 0, 0.08);
+    --whisp-bg: #18181b;
+    --whisp-text: #fafafa;
+    --whisp-border: rgba(255,255,255,.1);
   }
 }
 ```
@@ -279,8 +369,27 @@ import type {
   WhispItem,
   WhispOptions,
   WhisperProps,
-} from 'whisp-toast'
+} from "whisp-toast"
 ```
+
+---
+
+# Comparison
+
+| Library         | Zero Dependencies | Provider Required | Global API |
+| --------------- | ----------------- | ----------------- | ---------- |
+| whisp-toast     | ✅                 | ❌                 | ✅          |
+| Sonner          | ✅                 | ❌                 | ✅          |
+| React Hot Toast | ✅                 | ❌                 | ❌          |
+| React Toastify  | ❌                 | ✅                 | ❌          |
+
+---
+
+# Contributing
+
+Contributions, issues, and feature requests are welcome.
+
+Feel free to open a discussion or submit a pull request.
 
 ---
 
