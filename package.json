@@ -1,7 +1,7 @@
 {
   "name": "whisp-toast",
   "version": "1.0.1",
-  "description": "Librería ligera de toasts para React/Next.js, sin dependencias, con API global estilo toast.success().",
+  "description": "A lightweight, zero-dependency toast notification library for React and Next.js with a simple global API and effortless customization.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
