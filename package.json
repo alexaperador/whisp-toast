@@ -1,6 +1,6 @@
 {
   "name": "whisp-toast",
-  "version": "0.1.1",
+  "version": "1.0.1",
   "description": "Librería ligera de toasts para React/Next.js, sin dependencias, con API global estilo toast.success().",
   "type": "module",
   "main": "./dist/index.cjs",
